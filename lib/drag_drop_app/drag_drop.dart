@@ -1,19 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-class PhysicsDragDropApp extends StatelessWidget {
-  const PhysicsDragDropApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Physics Drag & Drop',
-      debugShowCheckedModeBanner: false,
-      home: const DragDropScreen(),
-    );
-  }
-}
-
 class DragDropScreen extends StatefulWidget {
   const DragDropScreen({super.key});
 
@@ -39,15 +25,13 @@ class _DragDropScreenState extends State<DragDropScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: matched.keys.map((color) {
-              return matched[color] == true
-                  ? const SizedBox(width: 70, height: 70) 
-                  : Draggable<Color>(
-                      data: color,
-                      feedback: BallWidget(color: color, radius: 35, opacity: 0.7),
-                      childWhenDragging:
-                          BallWidget(color: color.withOpacity(0.3), radius: 35),
-                      child: BallWidget(color: color, radius: 35),
-                    );
+              return Draggable<Color>(
+                data: color,
+                feedback: BallWidget(color: color, radius: 35, opacity: 0.7),
+                childWhenDragging:
+                    BallWidget(color: color.withOpacity(0.3), radius: 35),
+                child: BallWidget(color: color, radius: 35),
+              );
             }).toList(),
           ),
 
@@ -66,7 +50,7 @@ class _DragDropScreenState extends State<DragDropScreen> {
                     height: 80,
                     decoration: BoxDecoration(
                       color: matched[color] == true
-                          ? color.withOpacity(0.8) // صح
+                          ? color.withOpacity(0.8) // لو اتحطت الكورة الصح
                           : isActive
                               ? Colors.grey[300] // لما الكورة فوقه
                               : Colors.grey[200], // الحالة العادية
@@ -80,19 +64,12 @@ class _DragDropScreenState extends State<DragDropScreen> {
                     ),
                   );
                 },
-                onWillAccept: (data) => true, 
+                onWillAccept: (data) => true,
                 onAccept: (data) {
                   if (data == color) {
                     setState(() {
                       matched[color] = true;
                     });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("✅ Matched ${colorName(color)}!")),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text(" Wrong container!")),
-                    );
                   }
                 },
               );
@@ -101,13 +78,6 @@ class _DragDropScreenState extends State<DragDropScreen> {
         ],
       ),
     );
-  }
-
-  String colorName(Color c) {
-    if (c == Colors.red) return "Red";
-    if (c == Colors.green) return "Green";
-    if (c == Colors.blue) return "Blue";
-    return "Unknown";
   }
 }
 
